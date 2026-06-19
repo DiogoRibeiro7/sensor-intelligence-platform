@@ -1,0 +1,17 @@
+# Normalize line endings: store text files with LF in the repo.
+* text=auto eol=lf
+
+# Explicit binary types (never normalized).
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.parquet binary
+*.pkl binary
+*.joblib binary
+*.onnx binary
+*.h5 binary
