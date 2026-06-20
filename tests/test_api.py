@@ -69,6 +69,30 @@ def test_forecast_invalid_window_returns_422() -> None:
     assert resp.status_code == 422
 
 
+def test_dashboard_served() -> None:
+    resp = client.get("/dashboard")
+    assert resp.status_code == 200
+    assert "text/html" in resp.headers["content-type"]
+    assert "Sensor Intelligence Platform" in resp.text
+
+
+def test_root_serves_dashboard() -> None:
+    resp = client.get("/")
+    assert resp.status_code == 200
+    assert "<canvas id=\"chart\"" in resp.text
+
+
+def test_demo_payload_shape() -> None:
+    resp = client.get("/demo")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert len(body["series"]) == 2
+    assert {s["sensor_id"] for s in body["series"]} == {"temperature", "vibration"}
+    assert len(body["forecast"]["mean"]) == 48
+    # The injected temperature spike should produce at least one alert.
+    assert any(a["sensor_id"] == "temperature" for a in body["alerts"])
+
+
 def test_drift_psi() -> None:
     rng = np.random.default_rng(1)
     resp = client.post(

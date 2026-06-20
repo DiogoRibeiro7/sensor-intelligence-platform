@@ -74,3 +74,29 @@ class DriftResponse(BaseModel):
     """The computed drift result."""
 
     result: DriftResult
+
+
+class SeriesPayload(BaseModel):
+    """A single sensor's observed series, for plotting."""
+
+    sensor_id: str
+    timestamps: list[datetime]
+    values: list[float]
+
+    def to_window(self) -> TimeSeriesWindow:
+        """Convert to a validated domain window."""
+        return TimeSeriesWindow(
+            sensor_id=self.sensor_id, timestamps=self.timestamps, values=self.values
+        )
+
+
+class DemoResponse(BaseModel):
+    """A self-contained demo payload powering the dashboard.
+
+    Bundles simulated series, the alerts detected on them, and a forecast for
+    the primary sensor so the dashboard can render without any user input.
+    """
+
+    series: list[SeriesPayload]
+    alerts: list[Alert]
+    forecast: Forecast

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import numpy as np
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 
 from ..alerting import AlertPolicy
 from ..anomaly import (
@@ -20,13 +21,17 @@ from ..anomaly import (
 )
 from ..drift import ErrorDriftDetector, PsiDriftDetector
 from ..models import RollingMeanForecaster, SeasonalNaiveForecaster, TabularForecaster
+from ..simulation import AnomalyInjection, SensorSimulator, SensorSpec, SimulationConfig
+from .dashboard import render_dashboard
 from .schemas import (
     AnomalyRequest,
     AnomalyResponse,
+    DemoResponse,
     DriftRequest,
     DriftResponse,
     ForecastRequest,
     ForecastResponse,
+    SeriesPayload,
 )
 
 
@@ -56,6 +61,45 @@ def create_app() -> FastAPI:
     def health() -> dict[str, str]:
         """Liveness probe."""
         return {"status": "ok"}
+
+    @app.get("/", response_class=HTMLResponse)
+    @app.get("/dashboard", response_class=HTMLResponse)
+    def dashboard() -> str:
+        """Serve the monitoring dashboard page."""
+        return render_dashboard()
+
+    @app.get("/demo", response_model=DemoResponse)
+    def demo() -> DemoResponse:
+        """Return a self-contained simulated payload for the dashboard."""
+        config = SimulationConfig(
+            sensors=[
+                SensorSpec(sensor_id="temperature", baseline=60.0, daily_amplitude=8.0, unit="C"),
+                SensorSpec(sensor_id="vibration", baseline=0.4, noise_std=0.05, unit="g"),
+            ],
+            n_steps=480,
+            seed=42,
+            anomalies=[
+                AnomalyInjection(sensor_id="temperature", start_step=300, magnitude=30.0),
+            ],
+        )
+        frame = SensorSimulator(config).run()
+
+        series: list[SeriesPayload] = []
+        anomalies = []
+        detector = RobustZScoreDetector(window_size=60, threshold=4.0)
+        for sensor_id, group in frame.groupby("sensor_id", sort=False):
+            payload = SeriesPayload(
+                sensor_id=str(sensor_id),
+                timestamps=list(group["timestamp"]),
+                values=[float(v) for v in group["value"]],
+            )
+            series.append(payload)
+            anomalies.extend(detector.detect(payload.to_window()))
+
+        alerts = policy.from_anomalies(anomalies)
+        primary = series[0]
+        forecast = TabularForecaster(n_lags=48).fit(primary.to_window()).forecast(horizon=48)
+        return DemoResponse(series=series, alerts=alerts, forecast=forecast)
 
     @app.post("/detect/anomalies", response_model=AnomalyResponse)
     def detect_anomalies(request: AnomalyRequest) -> AnomalyResponse:

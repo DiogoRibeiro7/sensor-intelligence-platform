@@ -20,6 +20,22 @@ Build a production-style time-series system that ingests sensor data, generates 
 - Batch and simulated streaming execution.
 - MLflow-compatible experiment tracking.
 
+## Usage
+
+Run the API and dashboard:
+
+```bash
+uvicorn sensor_intelligence.api:app --reload
+```
+
+Then open <http://127.0.0.1:8000/> for the monitoring dashboard (forecast band +
+alert table), or use the JSON endpoints `/forecast`, `/detect/anomalies`, and
+`/drift`. The CLI offers `simulate` and an end-to-end `stream` demo:
+
+```bash
+python -m sensor_intelligence.cli stream --steps 720
+```
+
 ## Portfolio signal
 
 This project shows your strongest profile: rigorous time-series modelling, statistics, sensor intelligence, anomaly detection, and production ML.
