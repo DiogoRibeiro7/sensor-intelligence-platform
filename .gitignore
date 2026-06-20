@@ -11,12 +11,15 @@ build/
 .env.*
 .DS_Store
 .ipynb_checkpoints/
-data/raw/
-data/interim/
-data/processed/
-models/
-artifacts/
-mlruns/
+# Anchored to the repo root so these data/artifact directories do not also
+# match the source package src/sensor_intelligence/models, which the build
+# backend would otherwise exclude from the distribution.
+/data/raw/
+/data/interim/
+/data/processed/
+/models/
+/artifacts/
+/mlruns/
 .coverage
 coverage.xml
 htmlcov/
