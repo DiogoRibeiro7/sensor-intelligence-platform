@@ -70,7 +70,9 @@ def test_backtest_requires_window_longer_than_horizon() -> None:
 
 def test_log_to_mlflow_records_run(tmp_path: object) -> None:
     mlflow = pytest.importorskip("mlflow")
-    uri = (tmp_path / "mlruns").as_uri()  # type: ignore[attr-defined]
+    # Use a sqlite backend: newer MLflow puts the file store in maintenance mode.
+    db = (tmp_path / "mlflow.db").as_posix()  # type: ignore[attr-defined]
+    uri = f"sqlite:///{db}"
 
     run_id = log_to_mlflow(
         {"model": "seasonal_naive", "period": 24},
