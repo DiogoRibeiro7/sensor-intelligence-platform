@@ -49,6 +49,10 @@ pyyaml = "^6.0.1"
     warn_return_any = true
     no_implicit_optional = true
 
+    [[tool.mypy.overrides]]
+    module = ["sklearn.*"]
+    ignore_missing_imports = true
+
     [tool.pytest.ini_options]
     testpaths = ["tests"]
     addopts = "--cov=src --cov-report=term-missing"
