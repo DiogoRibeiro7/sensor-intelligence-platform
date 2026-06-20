@@ -3,6 +3,7 @@
     version = "0.1.0"
     description = "Forecasting and anomaly detection for sensor data."
     authors = ["Diogo Ribeiro <hansolo.dj@gmail.com>"]
+    license = "MIT"
     readme = "README.md"
     packages = [{ include = "sensor_intelligence", from = "src" }]
 

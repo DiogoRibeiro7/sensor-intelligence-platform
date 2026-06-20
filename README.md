@@ -4,6 +4,7 @@
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](https://www.python.org/)
 [![Typed](https://img.shields.io/badge/typed-mypy%20strict-blue)](https://mypy-lang.org/)
 [![Lint](https://img.shields.io/badge/lint-ruff-orange)](https://docs.astral.sh/ruff/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 A production-style time-series platform for **forecasting, anomaly detection, drift
 monitoring, and predictive maintenance** on industrial and IoT sensor data. It ingests
@@ -29,6 +30,7 @@ tests running in CI — it is meant to read like production code, not a notebook
 - [Project layout](#project-layout)
 - [Development](#development)
 - [Design principles](#design-principles)
+- [License](#license)
 
 ## Why this exists
 
@@ -242,3 +244,7 @@ tests on every push and pull request against Python 3.11.
   output.
 - **Small, tested, and honest.** Strict typing, linting, and a real test suite gate every
   change in CI.
+
+## License
+
+Released under the [MIT License](LICENSE). © 2026 Diogo Ribeiro.
