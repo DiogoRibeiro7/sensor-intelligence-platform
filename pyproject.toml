@@ -43,6 +43,9 @@ pyyaml = "^6.0.1"
     select = ["E", "F", "I", "B", "UP", "N", "ANN", "S", "C4", "SIM"]
     ignore = ["ANN101", "ANN102", "S101"]
 
+    [tool.ruff.lint.isort]
+    known-first-party = ["sensor_intelligence"]
+
     [tool.mypy]
     python_version = "3.11"
     strict = true
