@@ -148,3 +148,4 @@ class Alert(BaseModel):
     severity: AlertSeverity
     message: str = Field(min_length=1)
     anomalies: list[Anomaly] = Field(default_factory=list)
+    reason_codes: list[str] = Field(default_factory=list)
