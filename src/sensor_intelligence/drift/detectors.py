@@ -13,7 +13,10 @@ Two complementary monitors:
 from __future__ import annotations
 
 import numpy as np
+import numpy.typing as npt
 from pydantic import BaseModel, Field
+
+FloatArray = npt.NDArray[np.float64]
 
 
 class DriftResult(BaseModel):
@@ -41,7 +44,7 @@ class DriftResult(BaseModel):
 
 
 def population_stability_index(
-    reference: np.ndarray, current: np.ndarray, bins: int = 10, epsilon: float = 1e-6
+    reference: FloatArray, current: FloatArray, bins: int = 10, epsilon: float = 1e-6
 ) -> float:
     """Compute the Population Stability Index between two samples.
 
@@ -103,7 +106,7 @@ class PsiDriftDetector:
         self._threshold = threshold
         self._bins = bins
 
-    def evaluate(self, reference: np.ndarray, current: np.ndarray) -> DriftResult:
+    def evaluate(self, reference: FloatArray, current: FloatArray) -> DriftResult:
         """Compare ``current`` against ``reference`` and return a result."""
         psi = population_stability_index(reference, current, bins=self._bins)
         drifted = psi > self._threshold
@@ -134,7 +137,9 @@ class ErrorDriftDetector:
             raise ValueError("threshold must be positive.")
         self._threshold = threshold
 
-    def evaluate(self, reference_errors: np.ndarray, current_errors: np.ndarray) -> DriftResult:
+    def evaluate(
+        self, reference_errors: FloatArray, current_errors: FloatArray
+    ) -> DriftResult:
         """Return a drift result for current errors versus reference errors."""
         ref = np.abs(np.asarray(reference_errors, dtype=float))
         cur = np.abs(np.asarray(current_errors, dtype=float))

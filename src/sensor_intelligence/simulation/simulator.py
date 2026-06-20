@@ -13,7 +13,10 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
+
+FloatArray = npt.NDArray[np.float64]
 
 
 @dataclass(frozen=True)
@@ -102,14 +105,15 @@ class SensorSimulator:
         step = timedelta(seconds=self._config.step_seconds)
         return [self._config.start + i * step for i in range(self._config.n_steps)]
 
-    def _seasonal(self, spec: SensorSpec, seconds: np.ndarray) -> np.ndarray:
+    def _seasonal(self, spec: SensorSpec, seconds: FloatArray) -> FloatArray:
         """Return the deterministic trend-plus-seasonal component."""
         days = seconds / 86_400.0
         trend = spec.trend_per_day * days
         daily = spec.daily_amplitude * np.sin(2.0 * np.pi * days)
-        return spec.baseline + trend + daily
+        result: FloatArray = spec.baseline + trend + daily
+        return result
 
-    def _noise(self, spec: SensorSpec, rng: np.random.Generator) -> np.ndarray:
+    def _noise(self, spec: SensorSpec, rng: np.random.Generator) -> FloatArray:
         """Return an AR(1) noise series of length ``n_steps``."""
         n = self._config.n_steps
         innovations = rng.normal(0.0, spec.noise_std, size=n)
@@ -119,7 +123,7 @@ class SensorSimulator:
             noise[i] = spec.noise_ar * noise[i - 1] + innovations[i]
         return noise
 
-    def _apply_anomalies(self, sensor_id: str, values: np.ndarray) -> np.ndarray:
+    def _apply_anomalies(self, sensor_id: str, values: FloatArray) -> FloatArray:
         """Apply all injections targeting ``sensor_id`` in place-safe fashion."""
         out = values.copy()
         n = self._config.n_steps
@@ -149,7 +153,9 @@ class SensorSimulator:
             samples touched by an injection.
         """
         timestamps = self._timestamps()
-        seconds = np.arange(self._config.n_steps, dtype=float) * self._config.step_seconds
+        seconds = (
+            np.arange(self._config.n_steps) * self._config.step_seconds
+        ).astype(np.float64)
         rng = np.random.default_rng(self._config.seed)
 
         frames: list[pd.DataFrame] = []
