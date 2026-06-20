@@ -36,6 +36,13 @@ alert table), or use the JSON endpoints `/forecast`, `/detect/anomalies`, and
 python -m sensor_intelligence.cli stream --steps 720
 ```
 
+For a full walkthrough of the pipeline (simulate → features → forecast → detect
+→ drift → alerts → report), run the worked example:
+
+```bash
+python examples/end_to_end.py
+```
+
 ## Portfolio signal
 
 This project shows your strongest profile: rigorous time-series modelling, statistics, sensor intelligence, anomaly detection, and production ML.
