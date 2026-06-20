@@ -13,9 +13,10 @@ from __future__ import annotations
 import numpy as np
 
 from ..domain import Anomaly, TimeSeriesWindow
+from .detectors import AnomalyDetector
 
 
-class CusumChangePointDetector:
+class CusumChangePointDetector(AnomalyDetector):
     """Detect mean shifts with a standardized two-sided CUSUM.
 
     Parameters
