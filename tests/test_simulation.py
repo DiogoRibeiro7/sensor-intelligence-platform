@@ -7,6 +7,7 @@ from sensor_intelligence.simulation import (
     SensorSimulator,
     SensorSpec,
     SimulationConfig,
+    default_fleet,
 )
 
 
@@ -74,3 +75,28 @@ def test_drift_injection_ramps() -> None:
     assert bool(vib.loc[29, "is_anomaly"])
     # Ramp grows across the span: later offset exceeds earlier offset.
     assert vib.loc[29, "value"] > vib.loc[12, "value"]
+
+
+def test_default_fleet_shape_and_units() -> None:
+    fleet = default_fleet()
+
+    assert len(fleet) == 8
+    ids = [spec.sensor_id for spec in fleet]
+    assert len(set(ids)) == len(ids)
+    assert {"temperature", "vibration", "pressure"} <= set(ids)
+    assert all(spec.unit is not None for spec in fleet)
+
+
+def test_default_fleet_returns_independent_list() -> None:
+    first = default_fleet()
+    first.pop()
+
+    assert len(default_fleet()) == 8
+
+
+def test_default_fleet_simulates_all_channels() -> None:
+    cfg = SimulationConfig(sensors=default_fleet(), n_steps=96, step_seconds=900)
+    df = SensorSimulator(cfg).run()
+
+    assert set(df["sensor_id"].unique()) == {spec.sensor_id for spec in default_fleet()}
+    assert len(df) == 96 * 8

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from .fleet import default_fleet
 from .simulator import (
     AnomalyInjection,
     SensorSimulator,
@@ -14,4 +15,5 @@ __all__ = [
     "SensorSimulator",
     "SensorSpec",
     "SimulationConfig",
+    "default_fleet",
 ]

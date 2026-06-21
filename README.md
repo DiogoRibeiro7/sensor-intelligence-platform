@@ -12,7 +12,7 @@ sensor streams, produces probabilistic forecasts, flags anomalies and regime shi
 human-readable reason codes, monitors distributional drift, and serves everything through
 a typed REST API and a live dashboard.
 
-The codebase is small, fully typed (`mypy --strict`), linted (`ruff`), and covered by 82
+The codebase is small, fully typed (`mypy --strict`), linted (`ruff`), and covered by 85
 tests running in CI — it is meant to read like production code, not a notebook dump.
 
 ---
@@ -45,7 +45,7 @@ data, so every stage can be inspected, tested, and benchmarked.
 
 | Area | What it does |
 | --- | --- |
-| **Simulation** | Reproducible multivariate generator: trend, daily seasonality, AR(1) noise, and injectable spike/drift anomalies with ground-truth labels. |
+| **Simulation** | Reproducible multivariate generator: trend, daily seasonality, AR(1) noise, and injectable spike/drift anomalies with ground-truth labels — plus a reusable eight-channel reference fleet (`default_fleet`). |
 | **Feature engineering** | Rolling statistics, lag features, cyclical calendar encodings, and sensor-health/missingness features — computed per sensor with no cross-sensor leakage. |
 | **Forecasting** | Seasonal-naive and rolling-mean baselines plus a gradient-boosted tabular model with recursive multi-step forecasts and prediction intervals that widen with the horizon. |
 | **Anomaly detection** | EWMA residual and rolling median/MAD (robust z-score) point detectors, plus a CUSUM change-point detector that reports one event per regime shift. |
@@ -141,7 +141,9 @@ python -m sensor_intelligence.cli stream --steps 720
 **Simulation** — `sensor_intelligence.simulation`. `SensorSimulator` turns a
 `SimulationConfig` of `SensorSpec`s into a tidy long-format frame. Anomalies are injected
 via `AnomalyInjection` (spike or drift) and flagged with a ground-truth `is_anomaly`
-column for evaluation.
+column for evaluation. `default_fleet()` returns the eight reference channels (temperature,
+vibration, pressure, humidity, flow_rate, motor_current, supply_voltage, shaft_speed) that
+the notebooks share.
 
 **Features** — `sensor_intelligence.features`. `FeatureBuilder` adds rolling
 mean/std/min/max, lags, calendar sin/cos encodings, and sensor-health features
@@ -194,11 +196,16 @@ surfaced as `422` responses, not `500`s.
 
 ## Notebooks
 
-The [`notebooks/`](notebooks/) directory contains analytical walkthroughs:
+The [`notebooks/`](notebooks/) directory contains seven executed analytical walkthroughs,
+all built on the shared eight-sensor reference fleet:
 
-1. **`01_data_simulation_and_eda.ipynb`** — generate sensor data and explore its structure, seasonality, and injected faults.
+1. **`01_data_simulation_and_eda.ipynb`** — generate the fleet and explore its structure, seasonality, noise, and cross-sensor correlation.
 2. **`02_forecasting_and_backtesting.ipynb`** — baselines vs. the gradient-boosted model, prediction-interval calibration, and rolling backtests.
-3. **`03_anomaly_drift_and_alerting.ipynb`** — point anomalies, change points, drift detection, and the alerting policy on a labelled scenario.
+3. **`03_anomaly_drift_and_alerting.ipynb`** — deseasonalised point anomalies, change points, drift detection, and the alerting policy on a labelled scenario.
+4. **`04_feature_engineering.ipynb`** — the four `FeatureBuilder` families, leakage safety, and permutation importance behind the forecaster.
+5. **`05_streaming_and_online_detection.ipynb`** — bounded-memory streaming detection, batched inference, alert sinks, and online-vs-batch parity.
+6. **`06_fleet_monitoring.ipynb`** — fleet-wide forecasting health, anomaly + drift sweeps, and a ranked operations report.
+7. **`07_experiment_tracking.ipynb`** — a forecaster grid backtested across sensors and logged to MLflow, with a reproducible leaderboard.
 
 ## Project layout
 
@@ -217,8 +224,8 @@ src/sensor_intelligence/
 ├── api/           # FastAPI service, schemas, dashboard
 └── cli.py         # simulate / stream commands
 examples/          # runnable end-to-end walkthrough
-notebooks/         # analytical notebooks
-tests/             # 82 tests
+notebooks/         # 7 executed analytical notebooks
+tests/             # 85 tests
 ```
 
 ## Development
