@@ -8,6 +8,14 @@ explicitly.
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-08-06
+
+### Changed
+
+- Updated GitHub Actions dependencies to `actions/checkout@v7` and
+  `actions/setup-python@v7`.
+- Validated the updated CI workflow on Python 3.11 and 3.12.
+
 ## [0.1.1] - 2026-08-06
 
 ### Added
@@ -45,6 +53,7 @@ explicitly.
 
 - Removed vulnerable transitive dependency paths from the default runtime dependency graph.
 
-[Unreleased]: https://github.com/DiogoRibeiro7/sensor-intelligence-platform/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/DiogoRibeiro7/sensor-intelligence-platform/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/DiogoRibeiro7/sensor-intelligence-platform/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/DiogoRibeiro7/sensor-intelligence-platform/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/DiogoRibeiro7/sensor-intelligence-platform/releases/tag/v0.1.0

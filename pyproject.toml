@@ -1,6 +1,6 @@
 [tool.poetry]
     name = "sensor-intelligence-platform"
-    version = "0.1.1"
+    version = "0.1.2"
     description = "Forecasting and anomaly detection for sensor data."
     authors = ["Diogo Ribeiro <hansolo.dj@gmail.com>"]
     license = "MIT"

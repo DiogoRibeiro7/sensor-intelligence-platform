@@ -7,7 +7,7 @@ authors:
     given-names: "Diogo"
     orcid: "https://orcid.org/0009-0001-2022-7072"
     affiliation: "ESMAD - School of Media Arts and Design, Polytechnic of Porto"
-version: "0.1.1"
+version: "0.1.2"
 doi: "10.5281/zenodo.21826961"
 url: "https://github.com/DiogoRibeiro7/sensor-intelligence-platform"
 repository-code: "https://github.com/DiogoRibeiro7/sensor-intelligence-platform"
