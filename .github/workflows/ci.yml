@@ -9,18 +9,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
       - name: Install Poetry
         run: pipx install poetry
       - name: Install dependencies
         run: poetry install --with dev
+      - name: Check package metadata
+        run: poetry check
       - name: Lint
         run: poetry run ruff check .
       - name: Type check
         run: poetry run mypy src
+      - name: Import package
+        run: poetry run python -c "import sensor_intelligence; print(sensor_intelligence.__version__)"
       - name: Test
         run: poetry run pytest -q

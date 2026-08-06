@@ -5,6 +5,8 @@
 [![Typed](https://img.shields.io/badge/typed-mypy%20strict-blue)](https://mypy-lang.org/)
 [![Lint](https://img.shields.io/badge/lint-ruff-orange)](https://docs.astral.sh/ruff/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/DiogoRibeiro7/sensor-intelligence-platform)](https://github.com/DiogoRibeiro7/sensor-intelligence-platform/releases)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21826961.svg)](https://doi.org/10.5281/zenodo.21826961)
 
 A production-style time-series platform for **forecasting, anomaly detection, drift
 monitoring, and predictive maintenance** on industrial and IoT sensor data. It ingests
@@ -29,6 +31,9 @@ tests running in CI — it is meant to read like production code, not a notebook
 - [Notebooks](#notebooks)
 - [Project layout](#project-layout)
 - [Development](#development)
+- [Citation](#citation)
+- [Contributing](#contributing)
+- [Security](#security)
 - [Design principles](#design-principles)
 - [License](#license)
 
@@ -53,7 +58,7 @@ data, so every stage can be inspected, tested, and benchmarked.
 | **Alerting** | Severity policy (info/warning/critical) that merges coincident detections and aggregates reason codes for explainability. |
 | **Streaming** | Bounded-memory sliding-window processor with backpressure-safe batched inference and pluggable alert sinks. |
 | **Serving** | FastAPI service (`/forecast`, `/detect/anomalies`, `/drift`) and a self-contained monitoring dashboard. |
-| **Tracking** | Backtest metrics (MAE/RMSE/MAPE, interval coverage/width) and MLflow run logging. |
+| **Tracking** | Backtest metrics (MAE/RMSE/MAPE, interval coverage/width) and optional MLflow run logging. |
 
 ## Architecture
 
@@ -67,8 +72,8 @@ data, so every stage can be inspected, tested, and benchmarked.
    ▼            ▼           ▼            ▼             ▼            ▼
 features     models      anomaly       drift        alerting    tracking
 (rolling,   (baselines, (EWMA, MAD,   (PSI, error  (severity,   (backtest,
- lag,        tabular ML)  CUSUM)        drift)       reason       MLflow)
- calendar)                                           codes)
+ lag,        tabular ML)  CUSUM)        drift)       reason       optional
+ calendar)                                           codes)       MLflow)
    │            │           │            │             │
    └────────────┴───────────┴────────────┴─────────────┘
                             │
@@ -235,10 +240,30 @@ tests/             # 85 tests
 poetry run pytest          # tests with coverage
 poetry run ruff check .    # lint
 poetry run mypy src        # strict type checking
+poetry run pre-commit run --all-files
 ```
 
 CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs lint, type-check, and
-tests on every push and pull request against Python 3.11.
+tests on every push and pull request against Python 3.11 and 3.12.
+
+## Citation
+
+If you use this software, cite all versions with the Zenodo DOI:
+
+```text
+10.5281/zenodo.21826961
+```
+
+GitHub also reads citation metadata from [`CITATION.cff`](CITATION.cff).
+
+## Contributing
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for setup, quality checks, and project rules.
+
+## Security
+
+Please report vulnerabilities privately using [`SECURITY.md`](SECURITY.md). Do not open
+public issues for suspected security problems.
 
 ## Design principles
 
