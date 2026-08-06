@@ -1,0 +1,33 @@
+{
+  "title": "Sensor Intelligence Platform",
+  "upload_type": "software",
+  "description": "A production-style Python platform for forecasting, anomaly detection, drift monitoring, alerting, streaming inference, experiment tracking, and API serving for industrial and IoT sensor data.",
+  "creators": [
+    {
+      "name": "Ribeiro, Diogo",
+      "orcid": "0009-0001-2022-7072",
+      "affiliation": "ESMAD - School of Media Arts and Design, Polytechnic of Porto"
+    }
+  ],
+  "license": "MIT",
+  "version": "0.1.0",
+  "language": "eng",
+  "keywords": [
+    "sensor data",
+    "time series",
+    "forecasting",
+    "anomaly detection",
+    "drift monitoring",
+    "predictive maintenance",
+    "machine learning",
+    "FastAPI",
+    "Python"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/DiogoRibeiro7/sensor-intelligence-platform",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
