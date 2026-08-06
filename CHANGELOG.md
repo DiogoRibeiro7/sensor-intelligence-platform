@@ -8,6 +8,8 @@ explicitly.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-06
+
 ### Added
 
 - Repository governance files for contributions, security reporting, issue triage, pull
@@ -43,5 +45,6 @@ explicitly.
 
 - Removed vulnerable transitive dependency paths from the default runtime dependency graph.
 
-[Unreleased]: https://github.com/DiogoRibeiro7/sensor-intelligence-platform/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/DiogoRibeiro7/sensor-intelligence-platform/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/DiogoRibeiro7/sensor-intelligence-platform/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/DiogoRibeiro7/sensor-intelligence-platform/releases/tag/v0.1.0
