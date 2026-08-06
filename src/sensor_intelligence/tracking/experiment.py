@@ -39,7 +39,11 @@ def log_to_mlflow(
     str
         The MLflow run id.
     """
-    import mlflow
+    try:
+        import mlflow
+    except ImportError as exc:
+        message = "MLflow is required for log_to_mlflow but is not installed."
+        raise RuntimeError(message) from exc
 
     if tracking_uri is not None:
         mlflow.set_tracking_uri(tracking_uri)

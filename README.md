@@ -173,8 +173,9 @@ window per sensor (constant memory), runs detection once per fixed-size batch, d
 alerts by timestamp, and emits to a pluggable `AlertSink` (in-memory, callable, or logging).
 
 **Tracking** — `sensor_intelligence.tracking`. `backtest` holds out a series tail and scores
-any forecaster; `forecast_metrics` reports MAE/RMSE/MAPE and interval calibration;
-`log_to_mlflow` records params and metrics to MLflow.
+any forecaster; `forecast_metrics` reports MAE/RMSE/MAPE and interval calibration.
+`log_to_mlflow` is available as an optional MLflow integration when MLflow is installed
+separately.
 
 ## REST API and dashboard
 
@@ -205,7 +206,7 @@ all built on the shared eight-sensor reference fleet:
 4. **`04_feature_engineering.ipynb`** — the four `FeatureBuilder` families, leakage safety, and permutation importance behind the forecaster.
 5. **`05_streaming_and_online_detection.ipynb`** — bounded-memory streaming detection, batched inference, alert sinks, and online-vs-batch parity.
 6. **`06_fleet_monitoring.ipynb`** — fleet-wide forecasting health, anomaly + drift sweeps, and a ranked operations report.
-7. **`07_experiment_tracking.ipynb`** — a forecaster grid backtested across sensors and logged to MLflow, with a reproducible leaderboard.
+7. **`07_experiment_tracking.ipynb`** — a forecaster grid backtested across sensors with an optional MLflow logging path and a reproducible leaderboard.
 
 ## Project layout
 
@@ -219,7 +220,7 @@ src/sensor_intelligence/
 ├── drift/         # PSI and forecast-error drift monitors
 ├── alerting/      # severity policy and reason-code aggregation
 ├── streaming/     # bounded streaming processor and alert sinks
-├── tracking/      # backtest metrics and MLflow logging
+├── tracking/      # backtest metrics and optional MLflow logging
 ├── reporting/     # Markdown report generator
 ├── api/           # FastAPI service, schemas, dashboard
 └── cli.py         # simulate / stream commands
